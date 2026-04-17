@@ -1,0 +1,16 @@
+middlewares:
+  - id: "rate-limit"
+    type: "rateLimit"
+    config:
+      average: 100
+      burst: 50
+  - id: "security-headers"
+    type: "headers"
+    config:
+      customResponseHeaders:
+        Server: ""
+        X-Powered-By: ""
+      browserXSSFilter: true
+      contentTypeNosniff: true
+      forceSTSHeader: true
+      stsSeconds: 63072000

@@ -1,0 +1,103 @@
+# ================================
+# Certificati e chiavi crittografiche
+# ================================
+
+# Certificati
+*.crt
+*.cer
+*.ca-bundle
+*.p7b
+*.p7c
+*.p7s
+*.pem
+
+# Chiavi private
+*.key
+*.priv
+
+# Archivi di certificati / Keystores
+*.p12
+*.pfx
+*.pkcs12
+*.jks
+*.keystore
+*.truststore
+
+# Richieste di firma certificato (CSR)
+*.csr
+*.req
+
+# Revocation lists
+*.crl
+
+# DER encoded
+*.der
+
+# OpenSSL / misc
+*.srl
+*.old
+*.bak
+
+# Cartelle comuni dove vengono salvati i certificati
+certs/
+certificates/
+ssl/
+tls/
+keys/
+secrets/
+
+
+# Traefik
+acme.json
+
+# Docker secret
+.env
+.env.*
+.env_*
+!.env.example
+!.env_example
+
+# Vario
+.bash_history
+.bash_logout
+.bash_profile
+.bashrc
+.config
+.docker
+.lesshst
+.local
+.ssh
+
+
+# Pangolin - Crowdsec - Prometheus etc.
+appsec-configs
+appsec-rules
+collections
+contexts
+db
+dev.yaml
+hub
+parsers
+postoverflows
+scenarios
+local_api_credentials.yaml
+notifications
+online_api_credentials.yaml
+parsers
+patterns
+postoverflows
+profiles.yaml
+scenarios
+GeoLite2
+GeoLite2-ASN.mmdb
+GeoLite2-Country.mmdb
+grafana
+key
+letsencrypt
+logs
+maxmind
+data
+access.log
+middleware.db
+middleware.db-shm
+middleware.db-wal
