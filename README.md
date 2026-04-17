@@ -72,4 +72,4 @@ Exposed ports:
 
 Make sure DNS and firewall are properly configured.
 
-The Pangoling documentation is great, consult it to make a clean install https://docs.pangolin.net/about/how-pangolin-works
+The Pangoling documentation is great, consult it when making a clean install or for troubleshooting https://docs.pangolin.net/about/how-pangolin-works
