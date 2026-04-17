@@ -34,7 +34,6 @@ services:
       - ./config/crowdsec:/etc/crowdsec
       - ./config/crowdsec/db:/var/lib/crowdsec/data
       - ./config/traefik/logs:/var/log/traefik
-#      - /var/log/journal:/var/log/host:ro
   gerbil:
     cap_add:
       - NET_ADMIN
@@ -111,21 +110,16 @@ services:
       # Log Paths
       - TRAEFIK_LOG_DASHBOARD_ACCESS_PATH=/logs/access.log
       - TRAEFIK_LOG_DASHBOARD_ERROR_PATH=/logs/traefik.log
-      
       # Authentication
       - TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN=${AGENT_API_TOKEN}
-      
       # System Monitoring
       - TRAEFIK_LOG_DASHBOARD_SYSTEM_MONITORING=true
-      
       # GeoIP Configuration
       - TRAEFIK_LOG_DASHBOARD_GEOIP_ENABLED=true
       - TRAEFIK_LOG_DASHBOARD_GEOIP_CITY_DB=/geoip/GeoLite2-City.mmdb
       - TRAEFIK_LOG_DASHBOARD_GEOIP_COUNTRY_DB=/geoip/GeoLite2-Country.mmdb
-      
       # Log Format
       - TRAEFIK_LOG_DASHBOARD_LOG_FORMAT=json
-      
       # Server Port
       - PORT=5000
     healthcheck:
@@ -151,8 +145,8 @@ services:
       - AGENT_API_TOKEN=${AGENT_API_TOKEN}
       - NODE_ENV=production
       - PORT=3000
-      - GEOIP_LOCAL_DB_PATH=/geoip/GeoLite2-City.mmdb        # ← add
-      - GEOIP_PROVIDER_URLS=https://ip-api.com/json,https://ipwho.is  # ← add, ip-api first
+      - GEOIP_LOCAL_DB_PATH=/geoip/GeoLite2-City.mmdb
+      - GEOIP_PROVIDER_URLS=https://ip-api.com/json,https://ipwho.is
       - GEOIP_UNKNOWN_CACHE_TTL_MS=300000
     depends_on:
       traefik-agent:
