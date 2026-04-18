@@ -26,6 +26,8 @@ services:
     image: docker.io/crowdsecurity/crowdsec:latest
     labels:
       - traefik.enable=false
+      - wud.tag.include=^\d+$$
+      - wud.watch.digest=true
     ports:
       - 6060:6060 # Metrics port
       - 8080:8080 # Local API port
@@ -59,6 +61,7 @@ services:
       - ./config/:/var/config
   pangolin:
     container_name: pangolin
+    platform: linux/amd64
     deploy:
       resources:
         limits:
@@ -78,6 +81,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./config:/app/config
+    labels:
+      - wud.tag.include=^\d+\.\d+\.\d+-\d+-.*$$
+      - wud.tag.transform=^(\d+\.\d+\.\d+-\d+)-.*$$ => $$1
   traefik:
     command:
       - --configFile=/etc/traefik/traefik_config.yml
@@ -95,7 +101,9 @@ services:
       - ./config/letsencrypt:/letsencrypt
       - ./config/traefik/logs:/var/log/traefik
       - ./config/traefik/rules:/rules   # required
-# Traefik Log Dashboard Agent
+    labels:
+      - wud.tag.include=^\d+\.\d+\.\d+-\d+-.*$$
+      - wud.tag.transform=^(\d+\.\d+\.\d+-\d+)-.*$$ => $$1
   traefik-agent:
     image: hhftechnology/traefik-log-dashboard-agent:latest
     restart: unless-stopped
@@ -128,7 +136,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-
+    labels:
+      - wud.tag.include=^\d+$$
+      - wud.watch.digest=true
   # Traefik Log Dashboard - Web UI
   traefik-dashboard:
     image: hhftechnology/traefik-log-dashboard:latest
@@ -157,6 +167,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    labels:
+      - wud.tag.include=^\d+$$
+      - wud.watch.digest=true
   middleware-manager:
     image: hhftechnology/middleware-manager:latest
     container_name: middleware-manager
@@ -172,6 +185,9 @@ services:
       - PORT=3456
     ports:
       - "3456:3456"
+    labels:
+      - wud.tag.include=^\d+$$
+      - wud.watch.digest=true
   prometheus:
     container_name: prometheus
     image: prom/prometheus:latest
@@ -183,6 +199,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
+    labels:
+      - wud.tag.include=^\d+$$
+      - wud.watch.digest=true
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -193,6 +212,9 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - grafana-data:/var/lib/grafana
+    labels:
+      - wud.tag.include=^\d+$$
+      - wud.watch.digest=true
   geoipupdate:
     container_name: geoipupdate
     image: ghcr.io/maxmind/geoipupdate
@@ -204,8 +226,18 @@ services:
       - 'GEOIPUPDATE_FREQUENCY=72'
     volumes:
       - './config/maxmind:/usr/share/GeoIP'
-
-
+    labels:
+      - wud.tag.include=^\d+$$
+      - wud.watch.digest=true
+  whatsupdocker:
+    image: getwud/wud
+    container_name: wud
+    volumes:
+      - /run/user/1000/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - WUD_WATCHER_LOCAL_CRON=0 0 * * *
+      - WUD_TRIGGER_TELEGRAM_MYTELEGRAM_BOTTOKEN=${WUD_TRIGGER_TELEGRAM_MYTELEGRAM_BOTTOKEN}
+      - WUD_TRIGGER_TELEGRAM_MYTELEGRAM_CHATID=${WUD_TRIGGER_TELEGRAM_MYTELEGRAM_CHATID}
 volumes:
   grafana-data:
   prometheus-data:
